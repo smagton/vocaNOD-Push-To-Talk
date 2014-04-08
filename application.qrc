@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/favicon.png</file>
+        <file>images/vocaNOD.png</file>
+        <file>images/PushToTalk.png</file>
+        <file>images/green.png</file>
+        <file>images/red.png</file>
+    </qresource>
+</RCC>
