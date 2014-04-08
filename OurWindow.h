@@ -2,7 +2,7 @@
 #define OURWINDOW_H
 
 #include <QApplication>
-//#include<unordered_map>
+#include<unordered_map>
 #include <QMainWindow>
 #include <QPushButton>
 #include <QMouseEvent>
@@ -42,7 +42,7 @@ class OurWindow : public QMainWindow // On hérite de QWidget (IMPORTANT)
     void closeEvent(QCloseEvent *event);
 
     private:
-   // std::unordered_map<int,std::string> *buttonMapping;
+    std::unordered_map<int,std::string> buttonMapping;
     bool buttonState; //true if the user clicked to assign, false otherwise
     static int *temporaryKeyPressed;
     static int *keyPressedChar;

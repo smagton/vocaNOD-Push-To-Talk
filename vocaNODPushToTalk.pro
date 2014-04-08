@@ -6,7 +6,7 @@ SOURCES += \
 
 RESOURCES     = application.qrc
 
-
+QMAKE_CXXFLAGS += -std=c++11
 QT       += core gui network
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -16,6 +16,11 @@ HEADERS += \
     QWsSocket.h \
     Server.h \
     QTlsServer.h
+
+
+
+
+
 
 
 OTHER_FILES += \

@@ -16,41 +16,39 @@ OurWindow::OurWindow() : QMainWindow ()
     temporaryKeyPressed = new int;
     keyPressedChar = new int(0);
     wsServer = new Server(3939, QtWebsocket::Tcp);
-  //  buttonMapping = new std::unordered_map<int,std::string>;
 
-  /*  //We set the dictionary for button mapping, useful when we'll want to parse the key event
-    buttonMapping[16777216] = "Escape";
-    buttonMapping[16777217] = "Tab";
-    buttonMapping[16777219] = "BackSpace";
-    buttonMapping[16777221] = "Enter";
-    buttonMapping[16777234] = "Left";
-    buttonMapping[16777235] = "Up";
-    buttonMapping[16777236] = "Right";
-    buttonMapping[16777237] = "Left";
-    buttonMapping[16777238] = "PageUp";
-    buttonMapping[16777239] = "PageDown";
-    buttonMapping[16777248] = "Shift";
-    buttonMapping[16777249] = "Control";
-    buttonMapping[16777251] = "Alt";
-    buttonMapping[16781571] = "Alt Gr";
-    buttonMapping[16777252] = "CAPS LOCK §§";
-    buttonMapping[16777216] = "Enter";
-    buttonMapping[16777216] = "Enter";
-    buttonMapping[16777216] = "Enter";
-    buttonMapping[16777216] = "Enter";
-    buttonMapping[16777216] = "Enter";
-    buttonMapping[16777216] = "Enter";
-    buttonMapping[16777216] = "Enter";
-    buttonMapping[16777216] = "Enter";
-    buttonMapping[16777216] = "Enter";
-    buttonMapping[16777216] = "Enter";
-    buttonMapping[16777216] = "Enter";
-    buttonMapping[16777216] = "Enter";
-    buttonMapping[16777216] = "Enter";
-    buttonMapping[16777216] = "Enter";
-    buttonMapping[16777216] = "Enter";
-
-    Not finished yet (and boooooring), it will be done for 2.0 */
+   //We set the dictionary for button mapping, useful when we'll want to parse the key event (only for special chars)
+    buttonMapping = {
+        {16777216, "Escape"},
+        {16777217, "Tab"},
+        {16777219, "BackSpace"},
+        {16777221, "Enter NumPad"},
+        {16777234, "Left"},
+        {16777235, "Up"},
+        {16777236, "Right"},
+        {16777237, "Left"},
+        {16777238, "PageUp"},
+        {16777239, "PageDown"},
+        {16777248, "Shift"},
+        {16777249, "Control"},
+        {16777251, "Alt"},
+        {16781571, "Alt Gr"},
+        {16777252, "CAPS LOCK §§"},
+        {16777253, "Num Lock"},
+        {16777264, "F1"},
+        {16777265, "F2"},
+        {16777266, "F3"},
+        {16777267, "F4"},
+        {16777268, "F5"},
+        {16777269, "F6"},
+        {16777270, "F7"},
+        {16777271, "F8"},
+        {16777272, "F9"},
+        {16777273, "F10"},
+        {16777274, "F11"},
+        {16777275, "F12"},
+        {16777220, "Enter"},
+        {32,"Space"} };
 
     //We connect the server to the changeState so that the dot will change if you are connected
      QObject::connect(wsServer,SIGNAL(state(bool)),this,SLOT(changeState(bool)));
@@ -291,44 +289,21 @@ void OurWindow::keyPressEvent(QKeyEvent *event)
     //Same as the mouse press event
     *temporaryKeyPressed = event->key();
     if (active == true){
-      /*  switch(event->key()){
-          case 16777216: //Escape
-                statusBar()->showMessage("You wish to assign key Escape");
-                keyAssignedLabel->setText("Key assigned : Escape ");
-                break;
-        case 16777217: //Tab
-              statusBar()->showMessage("You wish to assign key Tab");
-              keyAssignedLabel->setText("Key assigned : Tab ");
-              break;
-        case 16777219: //BackSpace
-              statusBar()->showMessage("You wish to assign key BackSpace");
-              keyAssignedLabel->setText("Key assigned : BackSpace ");
-              break;
-        case 16777221: //Enter
-              statusBar()->showMessage("You wish to assign key Enter");
-              keyAssignedLabel->setText("Key assigned : Enter ");
-              break;
-        case 16777234: //Left
-              statusBar()->showMessage("You wish to assign key Left");
-              keyAssignedLabel->setText("Key assigned : Left ");
-              break;
-        case 16777235: //Up
-              statusBar()->showMessage("You wish to assign key Up");
-              keyAssignedLabel->setText("Key assigned : Up ");
-              break;
-        case 16777236: //Right
-              statusBar()->showMessage("You wish to assign key Right");
-              keyAssignedLabel->setText("Key assigned : Right ");
-              break;
-        case 16777237: //Down
-              statusBar()->showMessage("You wish to assign key Down");
-              keyAssignedLabel->setText("Key assigned : Down ");
-              break;
-          default:*/
+        std::unordered_map<int,std::string>::const_iterator got = buttonMapping.find (event->key());
+        if(got == buttonMapping.end()){
+
             statusBar()->showMessage("You wish to assign key " + event->text());
             keyAssignedLabel->setText("Key assigned : " + event->text());
-           // break;
-      //  } //Not finished yet, this is for allowing the display on keys such as Space, tab, etc...
+
+        }
+        else{
+
+            //Transforming std::string to QString
+            QString display = got->second.c_str();
+
+            statusBar()->showMessage("Key assigned " + display);
+            keyAssignedLabel->setText("Key assigned : " + display);
+        }
         accept();
         emit keyAssignedSignal();
         active = false;
