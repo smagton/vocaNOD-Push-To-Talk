@@ -18,11 +18,6 @@ HEADERS += \
     QTlsServer.h
 
 
-
-
-
-
-
 OTHER_FILES += \
     vocanod.rc
 
