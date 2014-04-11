@@ -22,7 +22,7 @@ OurWindow::OurWindow() : QMainWindow ()
         {16777216, "Escape"},
         {16777217, "Tab"},
         {16777219, "BackSpace"},
-        {16777221, "Enter NumPad"},
+        //{16777221, "Enter NumPad"},
         {16777234, "Left"},
         {16777235, "Up"},
         {16777236, "Right"},
@@ -32,7 +32,7 @@ OurWindow::OurWindow() : QMainWindow ()
         {16777248, "Shift"},
         {16777249, "Control"},
         {16777251, "Alt"},
-        {16781571, "Alt Gr"},
+       // {16781571, "Alt Gr"},
         {16777252, "CAPS LOCK §§"},
         {16777253, "Num Lock"},
         {16777264, "F1"},
@@ -50,6 +50,55 @@ OurWindow::OurWindow() : QMainWindow ()
         {16777220, "Enter"},
         {32,"Space"} };
 
+
+    buttonMappingQtToWindows = {
+        {16777216, 27}, //Escape
+        {16777217, 9}, //Tab
+        {16777219, 8}, //BackSpace
+        //{16777221, "Enter NumPad"}, //Enter NumPad
+        {16777234, 37}, //Left
+        {16777235, 36}, //Up
+        {16777236, 37}, //Right
+        {16777237, 38}, //Left
+        {16777238, 33}, //PageUp
+        {16777239, 34}, //PageDown
+        {16777248, 160}, //Shift //left //todo right shift
+        {16777249, 162}, //Control //left //todo right control
+        {16777251, 18}, //Alt
+       // {16781571, "Alt Gr"}, //Alt Gr
+        {16777252, 20}, //CAPS LOCK §§
+        {16777253, 144}, //Num Lock
+        {16777264, 112}, //F1
+        {16777265, 113}, //F2
+        {16777266, 114}, //F3
+        {16777267, 115}, //F4
+        {16777268, 116}, //F5
+        {16777269, 117}, //F6
+        {16777270, 118}, //F7
+        {16777271, 119}, //F8
+        {16777272, 120}, //F9
+        {16777273, 121}, //F10
+        {16777274, 122}, //F11
+        {16777275, 123}, //F12
+        {38, 49}, //1 (not numpad)
+        {201, 50}, //2
+        {34, 51}, //3
+        {39, 52}, //4
+        {40, 53}, //5
+        {45, 54}, //6
+        {200, 55}, //7
+        {95, 56}, //8
+        {199, 57}, //9
+        {192, 48}, //0
+        {44, 188}, //?
+        {59, 190}, //.
+        {58, 191}, // /
+        {33, 223}, //§
+        {217, 192}, //%
+        {42, 220}, //µ
+        {168, 221}, //¨
+        {36, 186}, //£
+        {32, 32} }; //Space //genius
     //We connect the server to the changeState so that the dot will change if you are connected
      QObject::connect(wsServer,SIGNAL(state(bool)),this,SLOT(changeState(bool)));
 
@@ -312,8 +361,20 @@ void OurWindow::keyPressEvent(QKeyEvent *event)
 
 
 void OurWindow::accept(){
-    //The accept is for assigned a char to keyPressed char that will be used in the several windows hookss
-    *keyPressedChar = *temporaryKeyPressed;
+
+     //The accept is for assigned a char to keyPressed char that will be used in the several windows hookss
+
+    //We see if the key pressed is in the hashmap
+    std::unordered_map<int,int>::const_iterator got = buttonMappingQtToWindows.find (*temporaryKeyPressed);
+    if(got == buttonMappingQtToWindows.end()){ // not found
+        printf("not found");
+        *keyPressedChar = *temporaryKeyPressed;
+    }
+    else{ // found , we put the windows value because it's not the same as the Qt one
+
+    *keyPressedChar = got->second;
+    }
+
 }
 
 void OurWindow::buttonClicked(){
@@ -357,6 +418,9 @@ LRESULT CALLBACK OurWindow::LowLevelKeyboardProc( int nCode, WPARAM wParam, LPAR
 
               wsServer->processReleased();
              }
+           else {
+               printf("Qt %d, windows %d \n",*keyPressedChar,(int)pKeyBoard->vkCode);
+           }
        }
        break;
        case WM_KEYDOWN: // When the key has been pressed

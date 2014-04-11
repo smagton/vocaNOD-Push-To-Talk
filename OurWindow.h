@@ -43,6 +43,7 @@ class OurWindow : public QMainWindow // On hérite de QWidget (IMPORTANT)
 
     private:
     std::unordered_map<int,std::string> buttonMapping;
+    std::unordered_map<int,int> buttonMappingQtToWindows;
     bool buttonState; //true if the user clicked to assign, false otherwise
     static int *temporaryKeyPressed;
     static int *keyPressedChar;
